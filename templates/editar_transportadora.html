@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Editar Transportadora</h1>
+
+<form method="POST">
+
+    <label>Nome:</label>
+
+    <input
+        type="text"
+        name="nome"
+        value="{{ transportadora[1] }}"
+        required
+    >
+
+    <button type="submit">
+        Salvar
+    </button>
+
+
+</form>
+
+{% endblock %}

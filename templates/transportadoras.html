@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Transportadoras</h1>
+
+<h2>Nova Transportadora</h2>
+
+<form method="Post">
+
+    <label>Nome:</label><br>
+    <input
+        type="text"
+        name="nome"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Cadastrar
+    </button>
+
+</form>
+
+<hr>
+
+<h2>Transportadoras cadastradas</h2>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ação</th>
+    </tr>
+
+    {% for transportadora in transportadoras %}
+
+    <tr>
+
+        <td>{{ transportadora[0] }}</td>
+        <td>{{ transportadora[1] }}</td>
+        <td>
+            <a href="{{ url_for('editar_transportadoras', id=transportadora[0]) }}">
+            Editar
+            </a>
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}
