@@ -4,6 +4,46 @@
 
 <h1>Roteiros</h1>
 
-<p>Area para consulta de roteiros</p>
+<form method="POST">
+
+    <button type="submit">
+        Abrir roteiro do dia
+    </button>
+</form>
+
+<hr>
+
+<h2>Historico de roteiros</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Data</th>
+        <th>Status</th>
+        <th>Ação</th>
+    </tr>
+
+    {% for roteiro in roteiros %}
+
+    <tr>
+
+        <td>
+            {{ roteiro[1] }}
+        </td>
+
+        <td>
+            {{ roteiro[2] }}
+        </td>
+
+        <td>
+            <a href="{{ url_for('vizualizar_roteiro', id=roteiro[0] )}}">
+                Visualizar
+            </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
 
 {% endblock %}

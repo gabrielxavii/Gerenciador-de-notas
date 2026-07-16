@@ -1,10 +1,15 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from database import(
     criar_banco,
     cadastrar_transportadora,
     listar_transportadoras,
     atualizar_transportadora,
-    buscar_transportadora
+    buscar_transportadora,
+    excluir_transportadora,
+    criar_roteiro,
+    listar_roteiros,
+    buscar_roteiro,
+    fechar_roteiro
 )
 
 app = Flask(__name__)
@@ -19,9 +24,21 @@ def dashboard():
 def leitura():
     return render_template("leitura.html")
 
-@app.route("/roteiros")
+@app.route("/roteiros", methods=["GET", "POST"])
 def roteiros():
-    return render_template("roteiros.html")
+
+    if request.method == "POST":
+
+        criado = criar_roteiro()
+
+        return redirect("/roteiros")
+    
+    roteiros = listar_roteiros()
+    
+    return render_template(
+        "roteiros.html",
+        roteiros=roteiros
+        )
 
 @app.route("/transportadoras", methods=["GET", "POST"])
 def transportadoras():
@@ -58,6 +75,28 @@ def editar_transportadoras(id):
             "editar_transportadora.html",
             transportadora=transportadora
         )
+
+@app.route("/transportadora/<int:id>/excluir", methods= ["POST"])
+def excluir_transportadora_rota(id):
+    excluir_transportadora(id)
+    return redirect(url_for("transportadoras"))
+
+@app.route("/roteiros/<int:id>")
+def vizualizar_roteiro(id):
+
+    roteiro = buscar_roteiro(id)
+
+    return render_template(
+        "vizualizar_roteiro.html",
+        roteiro=roteiro
+    )
+
+@app.route("/roteiros/<int:id>/fechar", methods=["POST"])
+def fechar_roteiro_rota(id):
+
+    fechar_roteiro(id)
+
+    return redirect("/roteiros")
 
 if __name__ == "__main__":
     app.run(debug=True)

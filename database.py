@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 # ==========================
 # CONEXÃO
 # ==========================
@@ -80,7 +81,7 @@ def listar_transportadoras():
 
     cursor.execute("""
         SELECT * FROM transportadoras
-        ORDER BY nome
+        ORDER BY LOWER(nome);
     """)
 
     transportadoras = cursor.fetchall()
@@ -135,6 +136,82 @@ def excluir_transportadora(id):
     conexao.commit()
     conexao.close()
 
+def criar_roteiro():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM roteiros
+        WHERE status = 'Aberto'
+    """)
+
+    roteiro_aberto = cursor.fetchone()
+
+    if roteiro_aberto:
+        conexao.close()
+        return False
+    
+    data_atual = date.today()
+
+    cursor.execute("""
+        INSERT INTO roteiros(data, status)
+        VALUES (?,?)
+    """, (data_atual, "Aberto"))
+
+    conexao.commit()
+    conexao.close()
+
+    return True
+
+def listar_roteiros():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM roteiros
+        ORDER BY data DESC
+    """)
+
+    roteiros = cursor.fetchall()
+
+    conexao.close()
+
+    return roteiros
+
+def buscar_roteiro(id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM roteiros
+        WHERE id = ?
+    """, (id,))
+
+    roteiro = cursor.fetchone()
+
+    conexao.close()
+
+    return roteiro
+
+def fechar_roteiro(id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE roteiros
+        SET status = 'Fechado'
+        WHERE id = ?
+    """, (id,))
+
+    conexao.commit()
+    conexao.close()
 
 
 if __name__ == "__main__":

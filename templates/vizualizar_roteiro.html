@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Vizualizar Roteiro</h1>
+
+<hr>
+
+<h2>Informações do roteiro</h2>
+
+<p>
+    Data:
+    {{ roteiro[1] }}
+</p>
+
+<p>
+    Status:
+    {{ roteiro[2] }}
+</p>
+
+<br>
+
+<a href="{{ url_for('roteiros') }}">
+    Voltar
+</a>
+
+{% if roteiro[2]== "Aberto" %}
+
+<form
+    action="{{ url_for('fechar_roteiro_rota', id=roteiro[0] )}}"
+    method="POST"
+>
+    <button type="submit">
+        Fechar roteiro
+    </button>
+</form>
+
+{% endif %}
+
+{% endblock %}

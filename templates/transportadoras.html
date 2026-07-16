@@ -30,7 +30,6 @@
 <table border="1">
 
     <tr>
-        <th>ID</th>
         <th>Nome</th>
         <th>Ação</th>
     </tr>
@@ -39,12 +38,21 @@
 
     <tr>
 
-        <td>{{ transportadora[0] }}</td>
         <td>{{ transportadora[1] }}</td>
         <td>
             <a href="{{ url_for('editar_transportadoras', id=transportadora[0]) }}">
             Editar
             </a>
+        
+            <form
+            action="{{ url_for('excluir_transportadora_rota', id=transportadora[0] )}}"
+            method="POST"
+            onsubmit="return confirm('Deseja realmente excluir esta transportadora?')"
+        > 
+                <button type="submit">
+                Excluir
+                </button>
+            </form>
         </td>
 
     </tr>
