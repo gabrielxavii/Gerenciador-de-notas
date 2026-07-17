@@ -9,20 +9,54 @@ from database import(
     criar_roteiro,
     listar_roteiros,
     buscar_roteiro,
-    fechar_roteiro
+    fechar_roteiro,
+    buscar_roteiro_aberto,
+    cadastrar_nota,
+    listar_notas,
+    listar_notas_roteiro
 )
 
 app = Flask(__name__)
 
 criar_banco()
 
+# ==========================
+# DASHBOARD
+# ==========================
+
 @app.route("/")
 def dashboard():
     return render_template("dashboard.html")
 
-@app.route("/leitura")
+
+# ==========================
+# NOTAS
+# ==========================
+
+@app.route("/leitura", methods=["GET", "POST"])
 def leitura():
-    return render_template("leitura.html")
+
+    if request.method == "POST":
+
+        numero_nf = request.form["numero_nf"]
+        transportadora_id = request.form["transportadora_id"]
+
+        cadastrar_nota(numero_nf, transportadora_id)
+
+        return redirect("/leitura")
+    
+    transportadoras = listar_transportadoras()
+    notas = listar_notas()
+
+    return render_template(
+        "leitura.html",
+        transportadoras=transportadoras,
+        notas=notas
+    )
+
+# ==========================
+# ROTEIROS
+# ==========================
 
 @app.route("/roteiros", methods=["GET", "POST"])
 def roteiros():
@@ -40,6 +74,29 @@ def roteiros():
         roteiros=roteiros
         )
 
+@app.route("/roteiros/<int:id>")
+def vizualizar_roteiro(id):
+
+    roteiro = buscar_roteiro(id)
+
+    notas = listar_notas_roteiro(id)
+
+    return render_template(
+        "vizualizar_roteiro.html",
+        roteiro=roteiro,
+        notas=notas
+    )
+
+@app.route("/roteiros/<int:id>/fechar", methods=["POST"])
+def fechar_roteiro_rota(id):
+
+    fechar_roteiro(id)
+
+    return redirect("/roteiros")
+
+# ==========================
+# TRANSPORTADORAS
+# ==========================
 @app.route("/transportadoras", methods=["GET", "POST"])
 def transportadoras():
 
@@ -81,22 +138,7 @@ def excluir_transportadora_rota(id):
     excluir_transportadora(id)
     return redirect(url_for("transportadoras"))
 
-@app.route("/roteiros/<int:id>")
-def vizualizar_roteiro(id):
 
-    roteiro = buscar_roteiro(id)
-
-    return render_template(
-        "vizualizar_roteiro.html",
-        roteiro=roteiro
-    )
-
-@app.route("/roteiros/<int:id>/fechar", methods=["POST"])
-def fechar_roteiro_rota(id):
-
-    fechar_roteiro(id)
-
-    return redirect("/roteiros")
 
 if __name__ == "__main__":
     app.run(debug=True)

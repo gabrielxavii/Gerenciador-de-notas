@@ -20,6 +20,34 @@
 
 <br>
 
+<hr>
+
+<h2>Notas do roteiro</h2>
+
+<table border="1">
+
+    <tr>
+        <th>NF</th>
+        <th>Transportadora</th>
+        <th>Status</th>
+        <th>Hora Pronta</th>
+    </tr>
+
+    {% for nota in notas %}
+
+    <tr>
+
+        <td>{{ nota[1] }}</td>
+        <td>{{ nota[2] }}</td>
+        <td>{{ nota[3] }}</td>
+        <td>{{ nota[4] }}</td>
+
+    </tr>
+
+    {% endfor %}
+    
+</table>
+
 <a href="{{ url_for('roteiros') }}">
     Voltar
 </a>

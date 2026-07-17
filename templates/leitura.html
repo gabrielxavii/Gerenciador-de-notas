@@ -4,6 +4,69 @@
 
 <h1>Leitura</h1>
 
-<p>Area responsavel pelo cadastro e listagem de notas</p>
+<form method="POST">
 
+    <label>Número da NF</label><br>
+
+    <input
+        type="text"
+        name="numero_nf"
+        required
+    >
+
+    <br><br>
+
+    <label>Transportadora</label>
+
+    <select
+        name="transportadora_id"
+        required
+    >
+        {% for transportadora in transportadoras %}
+
+        <option value="{{ transportadora[0] }}">
+            {{ transportadora[1] }}
+        </option>
+            
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        Cadastrar
+    </button>
+
+</form>
+
+<hr>
+
+<h2>Notas cadastradas</h2>
+
+<table border="1">
+
+    <tr>
+        <th>NF</th>
+        <th>Transportadora</th>
+        <th>Status</th>
+        <th>Hora Pronta</th>
+    </tr>
+
+    {% for nota in notas %}
+
+    <tr>
+        <td>{{ nota[1] }}</td>
+
+        <td>{{ nota[2] }}</td>
+
+        <td>{{ nota[3] }}</td>
+
+        <td>{{ nota[4] }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
 {% endblock %}

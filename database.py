@@ -136,6 +136,11 @@ def excluir_transportadora(id):
     conexao.commit()
     conexao.close()
 
+# ==========================
+# ROTEIROS
+# ==========================
+
+
 def criar_roteiro():
 
     conexao = conectar()
@@ -213,6 +218,115 @@ def fechar_roteiro(id):
     conexao.commit()
     conexao.close()
 
+
+# ==========================
+# NOTAS
+# ==========================
+
+def buscar_roteiro_aberto():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM roteiros
+        WHERE status = 'Aberto'
+    """)
+
+    roteiro = cursor.fetchone()
+
+    conexao.close()
+
+    return roteiro
+
+def cadastrar_nota(numero_nf, transportadora_id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    roteiro = buscar_roteiro_aberto()
+
+    if not roteiro:
+        conexao.close()
+        return False
+
+    roteiro_id = roteiro[0]
+
+    cursor.execute("""
+        INSERT INTO notas (
+            numero_nf,
+            transportadora_id,
+            roteiro_id,
+            status,
+            hora_pronta
+        )
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        numero_nf,
+        transportadora_id,
+        roteiro_id,
+        "Pendente",
+        None
+    ))
+
+    conexao.commit()
+    conexao.close()
+
+    return True
+
+def listar_notas():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            notas.id,
+            notas.numero_nf,
+            transportadoras.nome,
+            notas.status,
+            notas.hora_pronta
+        FROM notas
+        JOIN transportadoras
+            ON notas.transportadora_id = transportadoras.id
+        ORDER BY status ASC, numero_nf DESC   
+    """)
+
+    notas = cursor.fetchall()
+
+    conexao.close()
+
+    return notas
+
+def listar_notas_roteiro(roteiro_id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            notas.id,
+            notas.numero_nf,
+            transportadoras.nome,
+            notas.status,
+            notas.hora_pronta
+        FROM notas
+
+        JOIN transportadoras
+            ON notas.transportadora_id = transportadoras.id
+
+        WHERE notas.roteiro_id = ?
+
+        ORDER BY notas.numero_nf     
+
+    """, (roteiro_id,))
+
+    notas = cursor.fetchall()
+
+    conexao.close()
+
+    return notas
 
 if __name__ == "__main__":
     criar_banco()
