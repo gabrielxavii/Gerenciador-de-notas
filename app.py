@@ -15,7 +15,8 @@ from database import(
     listar_notas,
     listar_notas_roteiro,
     voltar_pendente,
-    marcar_pronta
+    marcar_pronta,
+    pesquisar_notas
 )
 
 app = Flask(__name__)
@@ -48,7 +49,16 @@ def leitura():
         return redirect("/leitura")
     
     transportadoras = listar_transportadoras()
-    notas = listar_notas()
+
+    pesquisa = request.args.get("pesquisa","")
+
+    if pesquisa:
+
+        notas = pesquisar_notas(pesquisa)
+
+    else:
+
+        notas = listar_notas()
 
     return render_template(
         "leitura.html",

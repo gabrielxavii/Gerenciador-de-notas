@@ -372,5 +372,34 @@ def voltar_pendente(id):
     conexao.commit()
     conexao.close()
 
+
+def pesquisar_notas(numero_nf):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            notas.id,
+            notas.numero_nf,
+            transportadoras.nome,
+            notas.status,
+            notas.hora_pronta
+        FROM notas
+                   
+        JOIN transportadoras
+            ON notas.transportadora_id = transportadoras.id
+        
+        WHERE notas.numero_nf LIKE ?
+                   
+        ORDER BY status ASC, numero_nf DESC
+    """, (f"%{numero_nf}%",))
+
+    notas = cursor.fetchall()
+
+    conexao.close()
+
+    return notas
+
 if __name__ == "__main__":
     criar_banco()
