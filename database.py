@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import date
+from datetime import datetime
 # ==========================
 # CONEXÃO
 # ==========================
@@ -327,6 +328,49 @@ def listar_notas_roteiro(roteiro_id):
     conexao.close()
 
     return notas
+
+def marcar_pronta(id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    hora_atual = datetime.now().strftime("%H:%M:%S")
+
+    cursor.execute("""
+        UPDATE notas
+        SET
+            status = ?,
+            hora_pronta = ?
+        WHERE id = ?
+    """,(
+        "Pronta",
+        hora_atual,
+        id
+    ))
+
+    conexao.commit()
+    conexao.close()
+
+
+def voltar_pendente(id):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE notas
+        SET
+            status = ?,
+            hora_pronta = ?
+        WHERE id = ?
+    """,(
+        "Pendente",
+        None,
+        id
+    ))
+
+    conexao.commit()
+    conexao.close()
 
 if __name__ == "__main__":
     criar_banco()

@@ -13,7 +13,9 @@ from database import(
     buscar_roteiro_aberto,
     cadastrar_nota,
     listar_notas,
-    listar_notas_roteiro
+    listar_notas_roteiro,
+    voltar_pendente,
+    marcar_pronta
 )
 
 app = Flask(__name__)
@@ -53,6 +55,20 @@ def leitura():
         transportadoras=transportadoras,
         notas=notas
     )
+
+@app.route("/notas/<int:id>/pronta", methods=["POST"])
+def marcar_pronta_rota(id):
+
+    marcar_pronta(id)
+
+    return redirect(request.referrer)
+
+@app.route("/notas/<int:id>/pendente", methods=["POST"])
+def voltar_pendente_rota(id):
+
+    voltar_pendente(id)
+
+    return redirect(request.referrer)
 
 # ==========================
 # ROTEIROS
