@@ -2,8 +2,40 @@
 
 {% block content %}
 
-<h1>Dashboard</h1>
+<h1>Dashboard Diário</h1>
 
-<p>Sistema iniciado com sucesso.</p>
+<h2>Total de NFs</h2>
+<p>{{ total }}</p>
 
+<h2>Pendentes</h2>
+<p>{{ pendentes }}</p>
+
+<h2>Prontas</h2>
+<p>{{ prontas }}</p>
+
+<h2>% Pendentes</h2>
+<p>{{ porcentagem_pendentes }}</p>
+
+<h2>% Prontas</h2>
+<p>{{ porcentagem_prontas }}</p>
+
+<h2>Notas por Transportadoras</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Transportadora</th>
+        <th>Total</th>
+    </tr>
+
+    {% for transportadora in totais_transportadoras %}
+
+    <tr>
+        <td>{{ transportadora[0] }}</td>
+        <td>{{ transportadora[1] }}</td>
+    </tr>
+
+    {% endfor %}
+    
+</table>
 {% endblock %}

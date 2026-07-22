@@ -16,7 +16,12 @@ from database import(
     listar_notas_roteiro,
     voltar_pendente,
     marcar_pronta,
-    pesquisar_notas
+    pesquisar_notas,
+    total_notas,
+    total_pendentes,
+    total_prontas,
+    total_poor_transportadora
+    
 )
 
 app = Flask(__name__)
@@ -29,7 +34,29 @@ criar_banco()
 
 @app.route("/")
 def dashboard():
-    return render_template("dashboard.html")
+
+    total = total_notas()
+    pendentes = total_pendentes()
+    prontas = total_prontas()
+    totais_transportadoras = total_poor_transportadora()
+
+
+    if total > 0:
+        porcentagem_pendentes = round((pendentes / total) * 100, 1)
+        porcentagem_prontas = round((prontas / total) * 100, 1)
+    else:
+        porcentagem_pendentes = 0
+        porcentagem_prontas = 0
+
+    return render_template(
+        "dashboard.html",
+        total=total,
+        pendentes=pendentes,
+        prontas=prontas,
+        porcentagem_pendentes=porcentagem_pendentes,
+        porcentagem_prontas=porcentagem_prontas,
+        totais_transportadoras=totais_transportadoras
+        )
 
 
 # ==========================

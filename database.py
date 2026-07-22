@@ -438,6 +438,64 @@ def total_notas():
 
     return total
 
+def total_pendentes():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT COUNT(*)
+        FROM notas
+        WHERE status = ?
+""", ('Pendente',))
+    
+    total = cursor.fetchone()[0]
+
+    conexao.close()
+
+    return total
+
+def total_prontas():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT COUNT(*)
+        FROM notas
+        WHERE status = ?
+""", ('Pronta',))
+    
+    total = cursor.fetchone()[0]
+
+    conexao.close()
+
+    return total
+
+def total_poor_transportadora():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            transportadoras.nome,
+            COUNT(*)
+        FROM notas
+                   
+        JOIN transportadoras
+            ON notas.transportadora_id = transportadoras.id
+        
+        GROUP BY transportadoras.nome
+                   
+        ORDER BY COUNT(*) DESC
+ """)
+    
+    totais = cursor.fetchall()
+
+    conexao.close()
+
+    return totais
 
 if __name__ == "__main__":
     criar_banco()
