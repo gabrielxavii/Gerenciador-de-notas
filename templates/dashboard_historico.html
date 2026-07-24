@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Dashboard Histórico</h1>
+
+<h2>Filtrar período</h2>
+
+<form method="GET">
+
+    <label>Mês</label>
+
+    <select name="mes">
+
+        <option value="01">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+
+    </select>
+
+    <label>Ano</label>
+
+    <input
+        type="number"
+        name="ano"
+        value="2026"
+        min="2024"
+        max="2100"
+    >
+
+    <button class="btn" type="submit">
+        Filtrar
+    </button>
+
+</form>
+
+{% if total is not none %}
+
+    <h2>Total de NFs</h2>
+
+    <p>{{ total }}</p>
+
+{% endif %}
+
+{% if transportadoras %}
+
+<h2>Notas por Transportadora</h2>
+
+<table>
+
+    <tr>
+        <th>Transportadora</th>
+        <th>Total</th>
+    </tr>
+
+    {% for transportadora in transportadoras %}
+
+    <tr>
+
+        <td>{{ transportadora[0] }}</td>
+        <td>{{ transportadora[1] }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endif %}
+
+<h2>Total de Roteiros</h2>
+
+<p>{{ total_roteiros }}</p>
+
+<h2>Média de NFs por Roteiro</h2>
+
+<p>{{ media_nf }}</p>
+
+{% endblock %}

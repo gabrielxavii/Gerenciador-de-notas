@@ -5,7 +5,12 @@ from datetime import datetime
 # CONEXÃO
 # ==========================
 def conectar():
-    return sqlite3.connect("database.db")
+
+    conexao = sqlite3.connect("database.db")
+
+    conexao.execute("PRAGMA foreign_keys = ON")
+
+    return conexao
 
 # ==========================
 # CRIAÇÃO DO BANCO
@@ -137,13 +142,17 @@ def excluir_transportadora(id):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
+    try:
+        cursor.execute("""
         DELETE FROM transportadoras
         WHERE id = ?
-    """, (id,))
+        """, (id,))
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+
+    finally:
+
+        conexao.close()
 
 # ==========================
 # ROTEIROS
@@ -540,6 +549,86 @@ def total_poor_transportadora():
     conexao.close()
 
     return totais
+
+# ==========================
+# DASHBOARD HISTORICO
+# ==========================
+
+def total_notas_periodo(mes,ano):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT COUNT(*)
+        FROM notas
+
+        JOIN roteiros
+            ON notas.roteiro_id = roteiros.id
+
+        WHERE strftime('%m', roteiros.data) = ?
+        AND strftime('%Y', roteiros.data) = ?
+    """, (mes,ano))
+
+    total = cursor.fetchone()[0]
+
+    conexao.close()
+
+    return total
+
+def total_transportadora_periodo(mes, ano):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT
+            transportadoras.nome,
+            COUNT(notas.id)
+
+        FROM notas
+
+        JOIN transportadoras
+            ON notas.transportadora_id = transportadoras.id
+
+        JOIN roteiros
+            ON notas.roteiro_id = roteiros.id
+
+        WHERE strftime('%m', roteiros.data) = ?
+        AND strftime('%Y', roteiros.data) = ?
+
+        GROUP BY transportadoras.id, transportadoras.nome
+
+        ORDER BY COUNT(notas.id) DESC
+    """, (mes, ano))
+
+    transportadoras = cursor.fetchall()
+
+    conexao.close()
+
+    return transportadoras
+
+def total_roteiros_periodo(mes, ano):
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT COUNT(*)
+        FROM roteiros
+
+        WHERE strftime('%m', data) = ?
+        AND strftime('%Y', data) = ?
+    """, (
+        mes,
+        ano
+    ))
+
+    total = cursor.fetchone()[0]
+
+    conexao.close()
+
+    return total
 
 if __name__ == "__main__":
     criar_banco()

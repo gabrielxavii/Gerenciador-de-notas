@@ -22,8 +22,11 @@ from database import(
     total_pendentes,
     total_prontas,
     total_poor_transportadora,
-    existe_roteiro_aberto
-    
+    existe_roteiro_aberto,
+    total_notas_periodo,
+    total_transportadora_periodo,
+    total_roteiros_periodo
+       
 )
 
 app = Flask(__name__)
@@ -233,8 +236,54 @@ def editar_transportadoras(id):
 
 @app.route("/transportadora/<int:id>/excluir", methods= ["POST"])
 def excluir_transportadora_rota(id):
-    excluir_transportadora(id)
+
+    try:
+        excluir_transportadora(id)
+
+        flash("Transportadora excluida com sucesso!", "success")
+
+    except sqlite3.IntegrityError:
+
+        flash(
+            "Não é possivel excluir esta transportadora porque existem notas vinculadas a ela.",
+            "error"
+        )
+
     return redirect(url_for("transportadoras"))
+
+# ==========================
+# DASHBOARD HISTORICO
+# ==========================
+
+@app.route("/dashboard_historico", methods=["GET"])
+def dashboard_historico():
+
+    mes = request.args.get("mes")
+    ano = request.args.get("ano")
+
+    total = None
+    transportadoras = []
+    total_roteiros = 0
+    media_nf = 0
+
+    if mes and ano:
+
+        total = total_notas_periodo(mes, ano)
+        transportadoras = total_transportadora_periodo(mes, ano)
+        total_roteiros = total_roteiros_periodo(mes, ano)
+
+    if total_roteiros >0:
+        media_nf = round(total / total_roteiros, 2)
+
+    return render_template(
+        "dashboard_historico.html",
+        mes=mes,
+        ano=ano,
+        total=total,
+        transportadoras=transportadoras,
+        total_roteiros=total_roteiros,
+        media_nf=media_nf
+    )
 
 
 
