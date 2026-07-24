@@ -38,8 +38,21 @@
     <tr>
 
         <td>{{ nota[1] }}</td>
+        
         <td>{{ nota[2] }}</td>
-        <td>{{ nota[3] }}</td>
+        
+        <td>
+            {% if nota[3] == "Pendente" %}
+                <span class="status status-pendente">
+                    {{ nota[3] }}
+                </span>
+            {% else %}
+            <span class="status status-pronta">
+                {{ nota[3] }}
+            </span>
+            {% endif %}
+        </td>
+
         <td>{{ nota[4] }}</td>
 
     </tr>
@@ -58,7 +71,7 @@
     action="{{ url_for('fechar_roteiro_rota', id=roteiro[0] )}}"
     method="POST"
 >
-    <button type="submit">
+    <button class="btn btn-danger" type="submit">
         Fechar roteiro
     </button>
 </form>

@@ -4,20 +4,35 @@
 
 <h1>Dashboard Diário</h1>
 
-<h2>Total de NFs</h2>
-<p>{{ total }}</p>
+<div class="cards">
 
-<h2>Pendentes</h2>
-<p>{{ pendentes }}</p>
 
-<h2>Prontas</h2>
-<p>{{ prontas }}</p>
+    <div class="card">
+        <h3> Total de NFs</h3>
+        <p>{{ total }}</p>
+    </div>
 
-<h2>% Pendentes</h2>
-<p>{{ porcentagem_pendentes }}</p>
+    <div class="card">
+        <h3>Pendentes</h3>
+        <p>{{ pendentes }}</p>
+    </div>
 
-<h2>% Prontas</h2>
-<p>{{ porcentagem_prontas }}</p>
+    <div class="card">
+        <h3>Prontas</h3>
+        <p>{{ prontas }}</p>
+    </div>
+
+    <div class="card">
+        <h3>% Pendentes</h3>
+        <p>{{ porcentagem_pendentes }}</p>
+    </div>
+
+    <div class="card">
+        <h3>% Prontas</h3>
+        <p>{{ porcentagem_prontas }}</p>
+    </div>
+
+</div>
 
 <h2>Notas por Transportadoras</h2>
 

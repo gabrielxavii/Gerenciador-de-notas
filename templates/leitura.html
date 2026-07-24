@@ -2,43 +2,48 @@
 
 {% block content %}
 
-<h1>Leitura</h1>
+<h1>Leitura de Notas</h1>
 
-<form method="POST">
+<div class="card-form">
 
-    <label>Número da NF</label><br>
+    <h2> Cadrastro de Nota Fiscal</h2>
 
-    <input
-        type="text"
-        name="numero_nf"
-        required
-    >
+    <form method="POST">
 
-    <br><br>
+        <label>Número da NF</label><br>
 
-    <label>Transportadora</label>
+        <input
+            type="text"
+            name="numero_nf"
+            required
+        >
 
-    <select
-        name="transportadora_id"
-        required
-    >
-        {% for transportadora in transportadoras %}
+        <br><br>
 
-        <option value="{{ transportadora[0] }}">
-            {{ transportadora[1] }}
-        </option>
+        <label>Transportadora</label>
+
+        <select
+            name="transportadora_id"
+            required
+        >
+            {% for transportadora in transportadoras %}
+
+            <option value="{{ transportadora[0] }}">
+                {{ transportadora[1] }}
+            </option>
             
-        {% endfor %}
+            {% endfor %}
 
-    </select>
+        </select>
 
-    <br><br>
+        <br><br>
 
-    <button type="submit">
-        Cadastrar
-    </button>
+        <button class="btn" type="submit">
+            Cadastrar
+        </button>
 
-</form>
+    </form>
+</div>
 
 <hr>
 
@@ -85,7 +90,18 @@
 
         <td>{{ nota[2] }}</td>
 
-        <td>{{ nota[3] }}</td>
+        <td>
+            {% if nota[3] == "Pendente" %}
+                <span class="status status-pendente">
+                    {{ nota[3] }}
+                </span>
+            {% else %}
+                <span class="status status-pronta">
+                    {{ nota[3] }}
+                </span>
+            {% endif %}
+        </td>
+
 
         <td>{{ nota[4] }}</td>
 
@@ -97,7 +113,7 @@
             method="POST"
         >
 
-            <button type="submit">
+            <button class="btn btn-sucess" type="submit">
                 Marcar pronta
             </button>
 

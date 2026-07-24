@@ -5,20 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logistic Web</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-<body>
-    
-    <nav>
-        <a href="/">Dashboard</a>
-        <a href="/leitura">Leitura</a>
-        <a href="/roteiros">Roteiros</a>
-        <a href="/transportadoras">Transportadoras</a>
-    </nav>
 
+<body>
+    <header>
+        <div class="Logo">
+            <h1>Logistic Web</h1>
+            <p> Gerenciamento de expedição</p>
+        </div>
+
+        <nav>
+            <a href="/">
+                <i class="fa-solid fa-chart-line"></i>
+                Dashboard
+            </a>
+
+            <a href="/leitura">
+                <i class="fa-solid fa-barcode"></i>               </i>
+                Leitura
+            </a>
+            
+            <a href="/roteiros">
+                <i class="fa-solid fa-route"></i>
+                Roteiros
+            </a>
+            
+            <a href="/transportadoras">
+                <i class="fa-solid fa-truck"></i>
+                Transportadoras
+            </a>
+        </nav>
+    </header>
+
+    <main class"container">
+        {% block content %}
+        {% endblock %}
+    </main>
     <hr>
 
-    {% block content %}
-    {% endblock %}
+  
 </body>
 </html>
