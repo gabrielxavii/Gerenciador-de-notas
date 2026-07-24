@@ -15,22 +15,23 @@
         <input
             type="text"
             name="numero_nf"
-            required
+            
         >
 
         <br><br>
 
         <label>Transportadora</label>
 
-        <select
-            name="transportadora_id"
-            required
-        >
-            {% for transportadora in transportadoras %}
+        <select name="transportadora_id">
 
-            <option value="{{ transportadora[0] }}">
-                {{ transportadora[1] }}
+            <option value="" disabled selected>
+                Selecione uma transportadora
             </option>
+
+            {% for transportadora in transportadoras %}
+                <option value="{{ transportadora[0] }}">
+                    {{ transportadora[1] }}
+                </option>
             
             {% endfor %}
 

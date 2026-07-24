@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, request, url_for
+import sqlite3
+from flask import Flask, render_template, redirect, request, url_for, flash
 from database import(
     criar_banco,
     cadastrar_transportadora,
@@ -20,11 +21,14 @@ from database import(
     total_notas,
     total_pendentes,
     total_prontas,
-    total_poor_transportadora
+    total_poor_transportadora,
+    existe_roteiro_aberto
     
 )
 
 app = Flask(__name__)
+
+app.secret_key = "logisticweb"
 
 criar_banco()
 
@@ -71,7 +75,23 @@ def leitura():
         numero_nf = request.form["numero_nf"]
         transportadora_id = request.form["transportadora_id"]
 
-        cadastrar_nota(numero_nf, transportadora_id)
+        if not numero_nf:
+            flash("Informe o número da nota fiscal.", "error")
+            return redirect("/leitura")
+
+        if not transportadora_id:
+            flash("Selecione uma transportadora.", "error")
+            return redirect("/leitura")
+
+        try:
+
+            cadastrar_nota(numero_nf, transportadora_id)
+
+            flash("Nota cadastrada com sucesso!!", "success")
+
+        except sqlite3.IntegrityError:
+
+            flash("Essa nota fiscal já está cadastrada", "error")
 
         return redirect("/leitura")
     
@@ -88,9 +108,9 @@ def leitura():
         notas = listar_notas()
 
     return render_template(
-        "leitura.html",
-        transportadoras=transportadoras,
-        notas=notas
+    "leitura.html",
+    transportadoras=transportadoras,
+    notas=notas
     )
 
 @app.route("/notas/<int:id>/pronta", methods=["POST"])
@@ -116,7 +136,21 @@ def roteiros():
 
     if request.method == "POST":
 
+        if existe_roteiro_aberto():
+        
+                flash(
+                    "Já existe um roteiro aberto. Feche o roteiro atual antes de criar outro.",
+                    "error"
+                )
+        
+                return redirect("/roteiros")
+
         criado = criar_roteiro()
+
+        flash(
+            "Roteiro aberto com sucesso!",
+            "success"
+        )
 
         return redirect("/roteiros")
     
@@ -155,9 +189,20 @@ def transportadoras():
 
     if request.method == "POST":
 
-        nome = request.form["nome"]
+        nome = request.form["nome"].strip()
 
-        cadastrar_transportadora(nome)
+        if not nome:
+            flash("Informe o nome da transportadora.", "error")
+            return redirect("/transportadoras")
+
+        try:
+            cadastrar_transportadora(nome)
+
+            flash("Transportadora cadastrada com sucesso!", "success")
+
+        except sqlite3.IntegrityError:
+
+            flash("Essa transportadora já está cadastrada.", "error")
 
         return redirect("/transportadoras")
     

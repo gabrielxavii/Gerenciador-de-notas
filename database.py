@@ -67,13 +67,17 @@ def cadastrar_transportadora(nome):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        INSERT INTO transportadoras (nome)
-        VALUES(?)
-    """, (nome,))
+    try:
+        cursor.execute("""
+            INSERT INTO transportadoras (nome)
+            VALUES(?)
+        """, (nome,))
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+
+    finally:
+
+        conexao.close()
 
 def listar_transportadoras():
 
@@ -112,17 +116,21 @@ def atualizar_transportadora(id, nome):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        UPDATE transportadoras
-        SET nome = ?
-        WHERE id = ?
-    """, (
-        nome,
-        id
-    ))
+    try:
 
-    conexao.commit()
-    conexao.close()
+        cursor.execute("""
+            UPDATE transportadoras
+            SET nome = ?
+            WHERE id = ?
+        """, (
+            nome,
+            id
+        ))
+
+        conexao.commit()
+
+    finally:
+        conexao.close()
 
 def excluir_transportadora(id):
 
@@ -147,29 +155,35 @@ def criar_roteiro():
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        SELECT *
-        FROM roteiros
-        WHERE status = 'Aberto'
-    """)
+    try:
+        cursor.execute("""
+            SELECT *
+            FROM roteiros
+            WHERE status = 'Aberto'
+        """)
 
-    roteiro_aberto = cursor.fetchone()
+        roteiro_aberto = cursor.fetchone()
 
-    if roteiro_aberto:
-        conexao.close()
-        return False
+        if roteiro_aberto:
+            conexao.close()
+            return False
     
-    data_atual = date.today()
+        data_atual = date.today()
 
-    cursor.execute("""
-        INSERT INTO roteiros(data, status)
-        VALUES (?,?)
-    """, (data_atual, "Aberto"))
+        cursor.execute("""
+            INSERT INTO roteiros(data, status)
+            VALUES (?,?)
+        """, (data_atual, "Aberto"))
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
 
-    return True
+        return True
+    
+    finally:
+
+        conexao.close()
+
+    
 
 def listar_roteiros():
 
@@ -210,14 +224,35 @@ def fechar_roteiro(id):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        UPDATE roteiros
-        SET status = 'Fechado'
-        WHERE id = ?
-    """, (id,))
+    try:
+        cursor.execute("""
+            UPDATE roteiros
+            SET status = 'Fechado'
+            WHERE id = ?
+        """, (id,))
 
-    conexao.commit()
+        conexao.commit()
+
+    finally:
+        conexao.close()
+
+def existe_roteiro_aberto():
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" 
+        SELECT id
+        FROM roteiros
+        WHERE status = 'Aberto'
+    """)
+
+    roteiro = cursor.fetchone()
+
     conexao.close()
+
+    return roteiro is not None
+    
 
 
 # ==========================
@@ -246,35 +281,39 @@ def cadastrar_nota(numero_nf, transportadora_id):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    roteiro = buscar_roteiro_aberto()
+    try:
 
-    if not roteiro:
-        conexao.close()
-        return False
+        roteiro = buscar_roteiro_aberto()
 
-    roteiro_id = roteiro[0]
+        if not roteiro:
+            return False
 
-    cursor.execute("""
-        INSERT INTO notas (
+        roteiro_id = roteiro[0]
+
+        cursor.execute("""
+            INSERT INTO notas (
+                numero_nf,
+                transportadora_id,
+                roteiro_id,
+                status,
+                hora_pronta
+            )
+            VALUES (?, ?, ?, ?, ?)
+        """, (
             numero_nf,
             transportadora_id,
             roteiro_id,
-            status,
-            hora_pronta
-        )
-        VALUES (?, ?, ?, ?, ?)
-    """, (
-        numero_nf,
-        transportadora_id,
-        roteiro_id,
-        "Pendente",
-        None
-    ))
+            "Pendente",
+            None
+        ))
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+    
+        return True
 
-    return True
+    finally:
+
+        conexao.close()
 
 def listar_notas():
 
@@ -345,22 +384,27 @@ def marcar_pronta(id):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    hora_atual = datetime.now().strftime("%H:%M:%S")
+    try:
 
-    cursor.execute("""
-        UPDATE notas
-        SET
-            status = ?,
-            hora_pronta = ?
-        WHERE id = ?
-    """,(
-        "Pronta",
-        hora_atual,
-        id
-    ))
+        hora_atual = datetime.now().strftime("%H:%M:%S")
 
-    conexao.commit()
-    conexao.close()
+        cursor.execute("""
+            UPDATE notas
+            SET
+                status = ?,
+                hora_pronta = ?
+            WHERE id = ?
+        """,(
+            "Pronta",
+            hora_atual,
+            id
+        ))
+
+        conexao.commit()
+
+    finally:
+
+        conexao.close()
 
 
 def voltar_pendente(id):
