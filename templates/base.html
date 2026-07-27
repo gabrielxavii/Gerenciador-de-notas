@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
 </head>
 
 <body>
@@ -53,12 +54,16 @@
         {% endif %}
     {% endwith %}
 
-    <main class"container">
+    <main class="container">
         {% block content %}
         {% endblock %}
     </main>
     <hr>
 
-  
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+{% block scripts %}
+{% endblock %}
+
 </body>
 </html>

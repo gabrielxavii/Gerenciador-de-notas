@@ -55,6 +55,10 @@
 
 <h2>Notas por Transportadora</h2>
 
+<div class="grafico-container">
+    <canvas id="graficoTransportadoras"></canvas>
+</div>
+
 <table>
 
     <tr>
@@ -84,4 +88,44 @@
 
 <p>{{ media_nf }}</p>
 
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    
+const ctx = document.getElementById("graficoTransportadoras");
+
+new Chart(ctx,{
+
+    type: "bar",
+
+    data: {
+
+        labels: {{ labels|tojson }},
+
+        datasets: [{
+
+            label: "Quantidade de NFs",
+
+            data: {{ valores|tojson }},
+
+            backgroundColor: "#3498db"
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+            }
+        }
+    }
+});
+</script>
 {% endblock %}

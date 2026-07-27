@@ -275,6 +275,16 @@ def dashboard_historico():
     if total_roteiros >0:
         media_nf = round(total / total_roteiros, 2)
 
+    labels = []
+    valores = []
+
+    for transportadora in transportadoras:
+
+        labels.append(transportadora[0])
+
+        valores.append(transportadora[1])
+
+
     return render_template(
         "dashboard_historico.html",
         mes=mes,
@@ -282,7 +292,9 @@ def dashboard_historico():
         total=total,
         transportadoras=transportadoras,
         total_roteiros=total_roteiros,
-        media_nf=media_nf
+        media_nf=media_nf,
+        labels=labels,
+        valores=valores
     )
 
 
