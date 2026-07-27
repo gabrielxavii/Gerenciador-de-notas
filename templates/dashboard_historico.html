@@ -53,12 +53,14 @@
 
 {% if transportadoras %}
 
-<h2>Notas por Transportadora</h2>
+<div class="card-grafico">
 
-<div class="grafico-container">
+    <h2>Notas por Transportadora</h2>
     <canvas id="graficoTransportadoras"></canvas>
+
 </div>
 
+<div class="tabela-container">
 <table>
 
     <tr>
@@ -77,6 +79,7 @@
     {% endfor %}
 
 </table>
+</div>
 
 {% endif %}
 
@@ -110,13 +113,18 @@ new Chart(ctx,{
 
             data: {{ valores|tojson }},
 
-            backgroundColor: "#3498db"
+            backgroundColor: "#2ecc71",
+
+            borderRadius: 8,
+
+            borderSkipped: false
         }]
     },
 
     options: {
 
         responsive: true,
+        maintainAspectRatio: false,
 
         plugins: {
 
@@ -124,6 +132,48 @@ new Chart(ctx,{
 
                 display: false
             }
+        },
+
+        scales:{
+
+            x: {
+
+                grid:{
+
+                    display: false
+                }
+            },
+
+            y: {
+                beginAtZero: true,
+
+                ticks:{
+
+                    precision: 0
+
+                }
+            }
+        },
+
+        tooltip: {
+
+            displayColors: false
+
+        },
+
+        animation: {
+
+            duration: 1200,
+
+            easing: "easeOutQuart"
+
+        },
+
+        ticks: {
+
+            precision: 0,
+
+            stepSize: 1
         }
     }
 });
