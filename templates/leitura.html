@@ -59,23 +59,24 @@
         value="{{ request.args.get('pesquisa','') }}"
     >
 
-    <button type="submit">
+    <button class="btn" type="submit">
         Pesquisar
     </button>
 
-    <a href="{{ url_for('leitura') }}"
-    <button type="button">
+    <a href="{{ url_for('leitura') }}">
+    <button class="btn" type="button">
       Limpar
     </button>
-
+    </a>
 </form>
 
 <br><br>
 
-<div class="tabela-container">
+
 
 <h2>Notas cadastradas</h2>
 
+<div class="tabela-container"></div>
 <table border="1">
 
     <tr>
@@ -129,7 +130,7 @@
             method="POST"
         >
 
-            <button type="submit">
+            <button class="btn" type="submit">
                 Voltar para pendente
             </button>
 
