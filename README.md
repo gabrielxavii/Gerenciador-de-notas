@@ -124,11 +124,7 @@ Deploy em ambiente de produção
 
 ## Dashboard Diário
 
-
 ![Dashboard Diário](img/dashboardd.jpg)
-
-![Dashboard Diário](img/Dashboard_diario.jpg)
-
 
 ## Dashboard Histórico
 
