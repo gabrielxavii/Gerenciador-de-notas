@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from flask import Flask, render_template, redirect, request, url_for, flash
 from database import(
     criar_banco,
@@ -31,7 +32,7 @@ from database import(
 
 app = Flask(__name__)
 
-app.secret_key = "logisticweb"
+app.secret_key = os.environ.get("SECRET KEY", "logisticweb")
 
 criar_banco()
 
