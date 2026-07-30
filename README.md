@@ -96,7 +96,7 @@ Como executar o projeto
 
 Clone o repositório:
 
-git clone <URL_DO_REPOSITORIO>
+git clone <https://github.com/gabrielxavii/Gerenciador-de-notas>
 
 Entre na pasta do projeto:
 
@@ -124,11 +124,11 @@ Deploy em ambiente de produção
 
 ## Dashboard Diário
 
-![Dashboard Diário](img/Dashboard diario.jpg)
+![Dashboard Diário](img/dashboardd.jpg)
 
 ## Dashboard Histórico
 
-![Dashboard Histórico](img/Dashboard_historico.jpg)
+![Dashboard Histórico](img/dashboardh.jpg)
 
 ## Leitura
 
