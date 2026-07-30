@@ -121,3 +121,23 @@ Controle de usuários e autenticação
 Relatórios em PDF
 Exportação para Excel
 Deploy em ambiente de produção
+
+## Dashboard Diário
+
+![Dashboard Diário](img/Dashboard diario.jpg)
+
+## Dashboard Histórico
+
+![Dashboard Histórico](img/Dashboard_historico.jpg)
+
+## Leitura
+
+![Leitura](img/Leitura.jpg)
+
+## Roteiros
+
+![Roteiros](img/roteiros.jpg)
+
+## Transportadoras
+
+![Transportadoras](img/Transportadoras.jpg)
